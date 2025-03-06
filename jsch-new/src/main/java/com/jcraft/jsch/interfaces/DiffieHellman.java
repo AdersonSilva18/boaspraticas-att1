@@ -27,17 +27,53 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.jcraft.jsch;
+package com.jcraft.jsch.interfaces;
 
-public interface DH{
-  void init() throws Exception;
-  void setP(byte[] p);
-  void setG(byte[] g);
-  byte[] getE() throws Exception;
-  void setF(byte[] f);
-  byte[] getK() throws Exception;
+public interface DiffieHellman {
 
-  // checkRange() will check if e and f are in [1,p-1]
-  // as defined at https://tools.ietf.org/html/rfc4253#section-8
-  void checkRange() throws Exception;
+  /**
+   * Inicializa os parâmetros e o estado interno para o processo de troca de chaves.
+   */
+  void initialize() throws Exception;
+
+  /**
+   * Define o número primo (modulus) utilizado no algoritmo Diffie-Hellman.
+   *
+   * @param primeModulus o valor do número primo em formato de byte array.
+   */
+  void setPrimeModulus(byte[] primeModulus);
+
+  /**
+   * Define o gerador (base) utilizado no algoritmo Diffie-Hellman.
+   *
+   * @param generator o valor do gerador em formato de byte array.
+   */
+  void setGenerator(byte[] generator);
+
+  /**
+   * Calcula e retorna o valor público gerado, a partir dos parâmetros internos.
+   *
+   * @return o valor público em formato de byte array.
+   */
+  byte[] computePublicValue() throws Exception;
+
+  /**
+   * Define o valor público recebido da outra parte para a troca de chaves.
+   *
+   * @param peerPublicValue o valor público da outra parte em formato de byte array.
+   */
+  void setPeerPublicValue(byte[] peerPublicValue);
+
+  /**
+   * Calcula e retorna o segredo compartilhado (chave comum) a partir dos valores públicos.
+   *
+   * @return o segredo compartilhado em formato de byte array.
+   */
+  byte[] computeSharedSecret() throws Exception;
+
+  /**
+   * Valida se os valores públicos gerados e recebidos estão dentro do intervalo seguro [1, primeModulus - 1],
+   * conforme definido na RFC4253, seção 8.
+   */
+  void validatePublicValues() throws Exception;
 }
