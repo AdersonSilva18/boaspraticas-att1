@@ -270,8 +270,8 @@ public class JSch{
     if(host==null){
       throw new JSchException("host must not be null.");
     }
-    Session s = new Session(this, username, host, port); 
-    return s;
+    Session session = new Session(this, username, host, port); 
+    return session;
   }
 
   protected void addSession(Session session){
@@ -518,13 +518,13 @@ public class JSch{
    * @throws JSchException if identityReposory has problems.
    */
   public Vector<String> getIdentityNames() throws JSchException{
-    Vector<String> foo=new Vector<String>();
+    Vector<String> identityNames=new Vector<String>();
     Vector<Identity> identities = identityRepository.getIdentities();
     for(int i=0; i<identities.size(); i++){
       Identity identity=(Identity)(identities.elementAt(i));
-      foo.addElement(identity.getName());
+      identityNames.addElement(identity.getName());
     }
-    return foo;
+    return identityNames;
   }
 
   /**
